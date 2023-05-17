@@ -134,6 +134,12 @@ COPY ./common/install_cudnn.sh install_cudnn.sh
 RUN if [ "${CUDNN_VERSION}" -eq 8 ]; then bash install_cudnn.sh; fi
 RUN rm install_cudnn.sh
 
+# [Optional] Install torch inductor benchmark deps
+ARG INDUCTOR_BENCHMARK
+COPY ./common/install_inductor_benchmark_deps.sh ./common/common_utils.sh ./
+RUN if [ -n "${INDUCTOR_BENCHMARK}" ]; then bash ./install_inductor_benchmark_deps.sh; fi
+RUN rm install_inductor_benchmark_deps.sh common_utils.sh
+
 # Delete /usr/local/cuda-11.X/cuda-11.X symlinks
 RUN if [ -h /usr/local/cuda-11.6/cuda-11.6 ]; then rm /usr/local/cuda-11.6/cuda-11.6; fi
 RUN if [ -h /usr/local/cuda-11.7/cuda-11.7 ]; then rm /usr/local/cuda-11.7/cuda-11.7; fi
